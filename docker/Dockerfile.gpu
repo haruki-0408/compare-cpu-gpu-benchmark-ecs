@@ -1,0 +1,9 @@
+FROM pytorch/pytorch:2.7.1-cuda12.4-cudnn9-runtime
+
+WORKDIR /app
+
+COPY benchmark.py .
+
+RUN chmod +x benchmark.py
+
+CMD ["python", "benchmark.py"]
