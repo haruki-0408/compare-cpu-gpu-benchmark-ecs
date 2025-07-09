@@ -1,6 +1,6 @@
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
-import * as autoscaling from 'aws-cdk-lib/aws-autoscaling';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
 export interface BenchmarkEcsClusterProps {
@@ -18,27 +18,36 @@ export class BenchmarkEcsCluster extends Construct {
       clusterName: 'benchmark-cluster',
     });
 
+    // ECS インスタンス用のIAMロール
+    const ecsInstanceRole = new iam.Role(this, 'EcsInstanceRole', {
+      assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AmazonEC2ContainerServiceforEC2Role'),
+      ],
+    });
+
     // CPU用インスタンス - 4 vCPU, 16GB RAM
-    const cpuAutoScalingGroup = new autoscaling.AutoScalingGroup(this, 'CpuAutoScalingGroup', {
+    new ec2.Instance(this, 'CpuInstance', {
       vpc: props.vpc,
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.M5, ec2.InstanceSize.XLARGE),
       machineImage: ecs.EcsOptimizedImage.amazonLinux2023(),
-      minCapacity: 1,
-      maxCapacity: 1,
-      desiredCapacity: 1,
+      role: ecsInstanceRole,
+      userData: ec2.UserData.custom(
+        `#!/bin/bash
+        echo ECS_CLUSTER=${this.cluster.clusterName} >> /etc/ecs/ecs.config`
+      ),
     });
 
     // GPU用インスタンス - 4 vCPU, 16GB RAM + T4 GPU
-    const gpuAutoScalingGroup = new autoscaling.AutoScalingGroup(this, 'GpuAutoScalingGroup', {
+    new ec2.Instance(this, 'GpuInstance', {
       vpc: props.vpc,
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.G4DN, ec2.InstanceSize.XLARGE),
       machineImage: ecs.EcsOptimizedImage.amazonLinux2023(ecs.AmiHardwareType.GPU),
-      minCapacity: 1,
-      maxCapacity: 1,
-      desiredCapacity: 1,
+      role: ecsInstanceRole,
+      userData: ec2.UserData.custom(
+        `#!/bin/bash
+        echo ECS_CLUSTER=${this.cluster.clusterName} >> /etc/ecs/ecs.config`
+      ),
     });
-
-    this.cluster.addAutoScalingGroup(cpuAutoScalingGroup);
-    this.cluster.addAutoScalingGroup(gpuAutoScalingGroup);
   }
 }

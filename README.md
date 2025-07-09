@@ -33,8 +33,13 @@ aws ecr get-login-password --region ap-northeast-1 | \
 docker login --username AWS --password-stdin <REPOSITORY_URI>
 
 cd docker
-docker build -f Dockerfile.cpu -t <REPOSITORY_URI>:latest .
-docker push <REPOSITORY_URI>:latest
+# CPUイメージ
+docker build -f Dockerfile.cpu -t <REPOSITORY_URI>:cpu .
+docker push <REPOSITORY_URI>:cpu
+
+# GPUイメージ
+docker build -f Dockerfile.gpu -t <REPOSITORY_URI>:gpu .
+docker push <REPOSITORY_URI>:gpu
 ```
 
 ### 6. ベンチマーク実行
@@ -42,14 +47,16 @@ docker push <REPOSITORY_URI>:latest
 # CPUベンチマーク
 aws ecs run-task \
     --cluster benchmark-cluster \
-    --task-definition benchmark-dev-BenchmarkStack-BenchmarkTaskDefs-CpuTaskDefinition \
-    --launch-type EC2
+    --task-definition benchmark-cpu-task \
+    --launch-type EC2 \
+    --network-configuration "awsvpcConfiguration={subnets=[subnet-xxxxxxx],securityGroups=[sg-xxxxxxx],assignPublicIp=ENABLED}"
 
-# GPUベンチマーク
+# GPUベンチマーク  
 aws ecs run-task \
     --cluster benchmark-cluster \
-    --task-definition benchmark-dev-BenchmarkStack-BenchmarkTaskDefs-GpuTaskDefinition \
-    --launch-type EC2
+    --task-definition benchmark-gpu-task \
+    --launch-type EC2 \
+    --network-configuration "awsvpcConfiguration={subnets=[subnet-xxxxxxx],securityGroups=[sg-xxxxxxx],assignPublicIp=ENABLED}"
 ```
 
 ### 7. 結果確認

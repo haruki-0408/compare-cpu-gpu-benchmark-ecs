@@ -44,15 +44,16 @@ export class BenchmarkTaskDefinitions extends Construct {
 
     // CPU用タスク定義
     this.cpuTaskDefinition = new ecs.Ec2TaskDefinition(this, 'CpuTaskDefinition', {
+      family: 'benchmark-cpu-task',
       executionRole: taskExecutionRole,
       taskRole: taskRole,
       networkMode: ecs.NetworkMode.AWS_VPC,
     });
 
     this.cpuTaskDefinition.addContainer('cpu-benchmark', {
-      image: ecs.ContainerImage.fromEcrRepository(props.repository, 'latest'),
-      memoryLimitMiB: 256,
-      cpu: 256,
+      image: ecs.ContainerImage.fromEcrRepository(props.repository, 'cpu'),
+      memoryLimitMiB: 4096,
+      cpu: 4096,
       essential: true,
       logging: ecs.LogDrivers.awsLogs({
         streamPrefix: 'cpu',
@@ -65,15 +66,16 @@ export class BenchmarkTaskDefinitions extends Construct {
 
     // GPU用タスク定義
     this.gpuTaskDefinition = new ecs.Ec2TaskDefinition(this, 'GpuTaskDefinition', {
+      family: 'benchmark-gpu-task',
       executionRole: taskExecutionRole,
       taskRole: taskRole,
       networkMode: ecs.NetworkMode.AWS_VPC,
     });
 
     this.gpuTaskDefinition.addContainer('gpu-benchmark', {
-      image: ecs.ContainerImage.fromEcrRepository(props.repository, 'latest'),
-      memoryLimitMiB: 512,
-      cpu: 512,
+      image: ecs.ContainerImage.fromEcrRepository(props.repository, 'gpu'),
+      memoryLimitMiB: 4096,
+      cpu: 4096,
       essential: true,
       gpuCount: 1,
       logging: ecs.LogDrivers.awsLogs({

@@ -1,0 +1,101 @@
+{
+    "tasks": [
+        {
+            "attachments": [
+                {
+                    "id": "7d8fb518-620e-4a32-85bc-622ca324e124",
+                    "type": "ElasticNetworkInterface",
+                    "status": "DELETED",
+                    "details": [
+                        {
+                            "name": "subnetId",
+                            "value": "subnet-0d7fd2c88157d6880"
+                        },
+                        {
+                            "name": "networkInterfaceId",
+                            "value": "eni-073a97e6519c78341"
+                        },
+                        {
+                            "name": "macAddress",
+                            "value": "06:d8:f0:74:46:59"
+                        },
+                        {
+                            "name": "privateDnsName",
+                            "value": "ip-10-0-0-67.ap-northeast-1.compute.internal"
+                        },
+                        {
+                            "name": "privateIPv4Address",
+                            "value": "10.0.0.67"
+                        }
+                    ]
+                }
+            ],
+            "attributes": [
+                {
+                    "name": "ecs.cpu-architecture",
+                    "value": "x86_64"
+                }
+            ],
+            "availabilityZone": "ap-northeast-1a",
+            "clusterArn": "arn:aws:ecs:ap-northeast-1:053141519842:cluster/benchmark-cluster",
+            "connectivity": "CONNECTED",
+            "connectivityAt": "2025-07-08T18:55:34.367000+09:00",
+            "containerInstanceArn": "arn:aws:ecs:ap-northeast-1:053141519842:container-instance/benchmark-cluster/a8c6276bccb849498ca73fc2dab30f54",
+            "containers": [
+                {
+                    "containerArn": "arn:aws:ecs:ap-northeast-1:053141519842:container/benchmark-cluster/e81391116ac349a7bb5528665723914e/bba6983a-dd93-4e6a-8a91-5794e2bfa1de",
+                    "taskArn": "arn:aws:ecs:ap-northeast-1:053141519842:task/benchmark-cluster/e81391116ac349a7bb5528665723914e",
+                    "name": "gpu-benchmark",
+                    "image": "053141519842.dkr.ecr.ap-northeast-1.amazonaws.com/pytorch-benchmark:gpu",
+                    "imageDigest": "sha256:14ef2c6b70bb976a4f8dddd04ca2459df8d94dc81cf0246c39fffa79e835a62d",
+                    "runtimeId": "104991778e514b2934db6e4aab53421bfd3a4f2fcbd78cc37f1eee140980cee8",
+                    "lastStatus": "STOPPED",
+                    "exitCode": 0,
+                    "networkBindings": [],
+                    "networkInterfaces": [
+                        {
+                            "attachmentId": "7d8fb518-620e-4a32-85bc-622ca324e124",
+                            "privateIpv4Address": "10.0.0.67"
+                        }
+                    ],
+                    "healthStatus": "UNKNOWN",
+                    "cpu": "512",
+                    "memory": "512",
+                    "gpuIds": [
+                        "GPU-ae1e322b-27f1-3a09-d2b2-1c228ed6bdcb"
+                    ]
+                }
+            ],
+            "cpu": "512",
+            "createdAt": "2025-07-08T18:55:34.367000+09:00",
+            "desiredStatus": "STOPPED",
+            "enableExecuteCommand": false,
+            "executionStoppedAt": "2025-07-08T18:55:51.275000+09:00",
+            "group": "family:benchmark-gpu-task",
+            "healthStatus": "UNKNOWN",
+            "lastStatus": "STOPPED",
+            "launchType": "EC2",
+            "memory": "512",
+            "overrides": {
+                "containerOverrides": [
+                    {
+                        "name": "gpu-benchmark"
+                    }
+                ],
+                "inferenceAcceleratorOverrides": []
+            },
+            "pullStartedAt": "2025-07-08T18:55:47.673000+09:00",
+            "pullStoppedAt": "2025-07-08T18:55:47.718000+09:00",
+            "startedAt": "2025-07-08T18:55:47.543000+09:00",
+            "stopCode": "EssentialContainerExited",
+            "stoppedAt": "2025-07-08T18:56:06.146000+09:00",
+            "stoppedReason": "Essential container in task exited",
+            "stoppingAt": "2025-07-08T18:55:51.788000+09:00",
+            "tags": [],
+            "taskArn": "arn:aws:ecs:ap-northeast-1:053141519842:task/benchmark-cluster/e81391116ac349a7bb5528665723914e",
+            "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:053141519842:task-definition/benchmark-gpu-task:1",
+            "version": 7
+        }
+    ],
+    "failures": []
+}
